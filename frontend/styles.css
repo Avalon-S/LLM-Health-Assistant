@@ -1,0 +1,76 @@
+/* 统一的粉蓝径向渐变背景 */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: radial-gradient(circle, #98c1d4 0%, #5583d2 100%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.login-container, .dashboard-container, .chat-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 500px;
+    min-height: 150px; 
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #007bff; 
+}
+
+input {
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin: 12px 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: #f7f9fc;
+    color: #333;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+input:focus {
+    border-color: #007bff;
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+    background-color: #ffffff;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: #0056b3; 
+}
+
+
+.dashboard-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px; 
+}

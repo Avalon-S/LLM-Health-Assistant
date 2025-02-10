@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <button id="user-info-btn" onclick="goToProfile()">User Info</button>
+        <h1 id="welcome-message">Welcome!</h1>
+        <div class="button-group">
+            <button onclick="healthChat()">Health Chat</button>
+            <button onclick="voiceChat()">Voice Chat</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        function goToProfile() {
+            window.location.href = "profile.html";
+        }
+
+        function healthChat() {
+            window.location.href = "health_chat.html";
+        }
+
+        function voiceChat() {
+            window.location.href = "voice_chat.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        }
+
+        // 加载用户信息并验证 JWT
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/verify", {
+                    headers: { "Authorization": `Bearer ${token}` },
+                });
+
+                if (!response.ok) {
+                
+                    localStorage.removeItem("token");
+                    window.location.href = "index.html";
+                } else {
+                    const data = await response.json();
+                    document.getElementById("welcome-message").textContent = `Welcome, ${data.username}!`;
+                }
+            } catch (error) {
+                console.error("Error during authentication:", error);
+                localStorage.removeItem("token");
+                window.location.href = "index.html";
+            }
+        });
+    </script>
+</body>
+</html>

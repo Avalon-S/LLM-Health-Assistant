@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: radial-gradient(circle, #98c1d4 0%, #5583d2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            overflow: hidden; 
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 600px;
+            min-height: 300px;
+            max-width: 90%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input {
+            width: calc(100% - 40px);
+            max-width: 320px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: #f7f9fc;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+            background-color: #ffffff;
+        }
+
+        button {
+            width: calc(100% - 40px);
+            max-width: 320px;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        #message {
+            color: #007bff;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="background"></canvas>
+    <div class="login-container">
+        <h1>LLM Health Assistant</h1>
+        <p>Please login to continue</p>
+        <div class="form-group">
+            <input type="text" id="username" placeholder="Username" />
+            <input type="password" id="password" placeholder="Password" />
+            <button onclick="login()">Login</button>
+        </div>
+        <p id="message"></p>
+    </div>
+    <script>
+        const canvas = document.getElementById("background");
+        const ctx = canvas.getContext("2d");
+
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        
+        const lines = [];
+        for (let i = 0; i < 100; i++) {
+            lines.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                dx: (Math.random() - 0.5) * 2,
+                dy: (Math.random() - 0.5) * 2,
+                length: Math.random() * 50 + 50,
+                alpha: Math.random() * 0.5 + 0.5,
+            });
+        }
+
+        function drawLines() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 0.5;
+
+            lines.forEach((line) => {
+                ctx.beginPath();
+                ctx.moveTo(line.x, line.y);
+                ctx.lineTo(line.x + line.length * line.dx, line.y + line.length * line.dy);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${line.alpha})`;
+                ctx.stroke();
+
+                line.x += line.dx;
+                line.y += line.dy;
+
+                
+                if (line.x < 0 || line.x > canvas.width) line.dx *= -1;
+                if (line.y < 0 || line.y > canvas.height) line.dy *= -1;
+            });
+
+            requestAnimationFrame(drawLines);
+        }
+
+        drawLines();
+
+        async function login() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if (!username || !password) {
+                document.getElementById("message").textContent = "Please enter both username and password.";
+                return;
+            }
+
+            const response = await fetch("/api/authenticate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("token", data.access_token);
+                localStorage.setItem("username", username);
+                const profileResponse = await fetch(`/api/user/${username}`, {
+                    headers: { "Authorization": `Bearer ${data.access_token}` }
+                });
+                if (profileResponse.status === 404) {
+                    window.location.href = "profile.html";
+                } else {
+                    window.location.href = "dashboard.html";
+                }
+            } else {
+                document.getElementById("message").textContent = "Authentication failed. Please try again.";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: radial-gradient(circle, #98c1d4 0%, #5583d2 100%);
+            color: white;
+        }
+        .profile-container {
+            width: 600px;
+            height: 550px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.4);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 16px;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            width: 48%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: #007bff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>User Profile</h1>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <input type="text" id="gender" placeholder="Enter your gender">
+        </div>
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" placeholder="Enter your age">
+        </div>
+        <div class="form-group">
+            <label for="medical_history">Medical History</label>
+            <textarea id="medical_history" placeholder="Enter your medical history"></textarea>
+        </div>
+        <div class="button-group">
+            <button onclick="saveProfile()">Save</button>
+            <button onclick="goBack()">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <script>
+        async function loadProfile() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            const username = localStorage.getItem("username");
+            try {
+                const response = await fetch(`/api/user/${username}`, {
+                    headers: { "Authorization": `Bearer ${token}` },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById("gender").value = data.gender || "";
+                    document.getElementById("age").value = data.age || "";
+                    document.getElementById("medical_history").value = data.medical_history || "";
+                } else {
+                    alert("Failed to load profile.");
+                    localStorage.removeItem("token");
+                    window.location.href = "index.html";
+                }
+            } catch (error) {
+                console.error("Error loading profile:", error);
+                alert("Failed to load profile.");
+                localStorage.removeItem("token");
+                window.location.href = "index.html";
+            }
+        }
+
+        async function saveProfile() {
+            const token = localStorage.getItem("token");
+            const username = localStorage.getItem("username");
+            const gender = document.getElementById("gender").value.trim();
+            const age = parseInt(document.getElementById("age").value.trim(), 10);
+            const medical_history = document.getElementById("medical_history").value.trim();
+
+            if (!gender || isNaN(age) || !medical_history) {
+                alert("Please fill out all fields before saving.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/user/${username}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ gender, age, medical_history }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(data.message);
+                } else {
+                    alert(`Error: ${data.detail}`);
+                }
+            } catch (error) {
+                console.error("Error saving profile:", error);
+                alert("Failed to save profile.");
+            }
+        }
+
+        function goBack() {
+            window.location.href = "dashboard.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", loadProfile);
+    </script>
+</body>
+</html>

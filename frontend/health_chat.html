@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Chat</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+        .chat-container {
+            width: 95%;
+            max-width: 800px;
+            background: rgba(240, 240, 240, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(240, 240, 240, 0.8);
+            height: 400px;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 20px;
+            max-width: 80%;
+        }
+        .user {
+            background: #00bcd4;
+            color: white;
+            align-self: flex-end;
+        }
+        .assistant {
+            background: #6a9fb5;
+            color: #fff;
+            align-self: flex-start;
+        }
+        input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+            outline: none;
+            background: rgba(240, 240, 240, 0.8);
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            background: #00bcd4;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        button:hover {
+            background: #0097a7;
+            transform: scale(1.1);
+        }
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        #back-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button id="back-button" onclick="goBack()">Back to Dashboard</button>
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+        <div style="display: flex; align-items: center;">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        function goBack() {
+            window.location.href = "dashboard.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("You are not logged in. Redirecting to login page.");
+                window.location.href = "index.html";
+                return;
+            }
+        });
+
+        async function sendMessage() {
+            const input = document.getElementById("user-input");
+            const message = input.value.trim();
+            const token = localStorage.getItem("token");
+
+            if (!message) return;
+
+            const messagesDiv = document.getElementById("messages");
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.className = "message user";
+            userMessageDiv.textContent = message;
+            messagesDiv.appendChild(userMessageDiv);
+
+            input.value = "";
+
+            try {
+                const response = await fetch("/api/health_chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ prompt: message }),
+                });
+
+                const data = await response.json();
+
+                const assistantMessageDiv = document.createElement("div");
+                assistantMessageDiv.className = "message assistant";
+                assistantMessageDiv.textContent = data.response || "Error in response";
+                messagesDiv.appendChild(assistantMessageDiv);
+
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+        }
+    </script>
+</body>
+</html>
