@@ -215,7 +215,7 @@ docker-compose build --no-cache
 
 - Start the container (run in the background)
 ```bash
-docker-compose build --no-cache
+docker-compose up -d
 ```
 
 - Stop all containers started by `docker-compose` up
