@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - SECRET_KEY=15574233c1389db481106533430bcfe7949cb762f32ca8a65c4f799511cdeefa
+      - PINECONE_API_KEY=71022a59fcf84445babb0d70cad33210.kaS0RCoFz3tXjRab
+      - ZHIPU_API_KEY=pcsk_6QZqcB_5g62RfbUS4LKfxchCR96RMu85tt9DwdFaQpsudMBgULLSHZemQbSdbXWw8Qj5AD
+    volumes:
+      - .:/app
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

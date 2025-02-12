@@ -1,0 +1,10 @@
+fastapi==0.115.8
+passlib==1.7.4
+pinecone==6.0.1
+pydantic==2.10.6
+python-dotenv==1.0.1
+python_jose==3.3.0
+Requests==2.32.3
+sentence_transformers==3.4.1
+SQLAlchemy==2.0.38
+uvicorn==0.34.0
