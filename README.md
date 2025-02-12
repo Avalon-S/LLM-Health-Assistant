@@ -9,6 +9,10 @@
   <a href="docs/LLM Health Assistant Project Report.pdf"><strong>A Brief Report</strong></a><br>
   <em><br></em>
 </div>
+<div align="center">
+  <a href="https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Avalon-S/LLM-Health-Assistant/main/docs/openapi.json"><strong>API Document</strong></a><br>
+  <em><br></em>
+</div>
 
 ---
 
