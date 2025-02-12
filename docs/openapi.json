@@ -1,1 +1,565 @@
-{"openapi":"3.1.0","info":{"title":"FastAPI","version":"0.1.0"},"paths":{"/api/health_chat/":{"post":{"tags":["Health Chat"],"summary":"Chat With Model","description":"Processing users' health consultation requests","operationId":"chat_with_model_api_health_chat__post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ChatRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"OAuth2PasswordBearer":[]}]}},"/api/query_pubmed/":{"post":{"tags":["PubMed Query"],"summary":"Query Pubmed","operationId":"query_pubmed_api_query_pubmed__post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/PubMedRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/voice_chat/":{"post":{"tags":["Voice Chat"],"summary":"Voice Chat","description":"接收用户音频文件，调用大模型接口，返回文本和音频回复","operationId":"voice_chat_api_voice_chat__post","requestBody":{"content":{"multipart/form-data":{"schema":{"$ref":"#/components/schemas/Body_voice_chat_api_voice_chat__post"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/authenticate":{"post":{"summary":"Authenticate","operationId":"authenticate_api_authenticate_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/LoginRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/verify":{"get":{"summary":"Verify Dashboard","operationId":"verify_dashboard_api_verify_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}},"security":[{"OAuth2PasswordBearer":[]}]}},"/api/user/{username}":{"get":{"summary":"Get User","operationId":"get_user_api_user__username__get","security":[{"OAuth2PasswordBearer":[]}],"parameters":[{"name":"username","in":"path","required":true,"schema":{"type":"string","title":"Username"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"put":{"summary":"Update User","operationId":"update_user_api_user__username__put","security":[{"OAuth2PasswordBearer":[]}],"parameters":[{"name":"username","in":"path","required":true,"schema":{"type":"string","title":"Username"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserProfile"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/chat":{"post":{"summary":"Chat With Model","operationId":"chat_with_model_api_chat_post","security":[{"OAuth2PasswordBearer":[]}],"parameters":[{"name":"username","in":"query","required":true,"schema":{"type":"string","title":"Username"}},{"name":"message","in":"query","required":true,"schema":{"type":"string","title":"Message"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/chat/{username}":{"get":{"summary":"Get Chat History","operationId":"get_chat_history_api_chat__username__get","security":[{"OAuth2PasswordBearer":[]}],"parameters":[{"name":"username","in":"path","required":true,"schema":{"type":"string","title":"Username"}},{"name":"top_k","in":"query","required":false,"schema":{"type":"integer","default":3,"title":"Top K"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/":{"get":{"summary":"Read Root","operationId":"read_root__get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}}},"components":{"schemas":{"Body_voice_chat_api_voice_chat__post":{"properties":{"file":{"type":"string","format":"binary","title":"File"}},"type":"object","required":["file"],"title":"Body_voice_chat_api_voice_chat__post"},"ChatRequest":{"properties":{"prompt":{"type":"string","title":"Prompt"}},"type":"object","required":["prompt"],"title":"ChatRequest"},"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"LoginRequest":{"properties":{"username":{"type":"string","title":"Username"},"password":{"type":"string","title":"Password"}},"type":"object","required":["username","password"],"title":"LoginRequest"},"PubMedRequest":{"properties":{"query":{"type":"string","title":"Query"}},"type":"object","required":["query"],"title":"PubMedRequest"},"UserProfile":{"properties":{"gender":{"type":"string","title":"Gender"},"age":{"type":"integer","title":"Age"},"medical_history":{"type":"string","title":"Medical History"}},"type":"object","required":["gender","age","medical_history"],"title":"UserProfile"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"}},"securitySchemes":{"OAuth2PasswordBearer":{"type":"oauth2","flows":{"password":{"scopes":{},"tokenUrl":"token"}}}}}}
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "FastAPI",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/health_chat/": {
+            "post": {
+                "tags": [
+                    "Health Chat"
+                ],
+                "summary": "Chat With Model",
+                "description": "Processing users' health consultation requests",
+                "operationId": "chat_with_model_api_health_chat__post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChatRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/query_pubmed/": {
+            "post": {
+                "tags": [
+                    "PubMed Query"
+                ],
+                "summary": "Query Pubmed",
+                "operationId": "query_pubmed_api_query_pubmed__post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PubMedRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "results": [
+                                        "Study 1",
+                                        "Study 2",
+                                        "Study 3"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Searches the PubMed database for relevant medical literature based on the provided query."
+            }
+        },
+        "/api/voice_chat/": {
+            "post": {
+                "tags": [
+                    "Voice Chat"
+                ],
+                "summary": "Voice Chat",
+                "description": "接收用户音频文件，调用大模型接口，返回文本和音频回复",
+                "operationId": "voice_chat_api_voice_chat__post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_voice_chat_api_voice_chat__post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/authenticate": {
+            "post": {
+                "summary": "Authenticate",
+                "operationId": "authenticate_api_authenticate_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/verify": {
+            "get": {
+                "summary": "Verify Dashboard",
+                "operationId": "verify_dashboard_api_verify_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/user/{username}": {
+            "get": {
+                "summary": "Get User",
+                "operationId": "get_user_api_user__username__get",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Username"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update User",
+                "operationId": "update_user_api_user__username__put",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Username"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserProfile"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/chat": {
+            "post": {
+                "summary": "Chat With Model",
+                "operationId": "chat_with_model_api_chat_post",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Username"
+                        }
+                    },
+                    {
+                        "name": "message",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Message"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/chat/{username}": {
+            "get": {
+                "summary": "Get Chat History",
+                "operationId": "get_chat_history_api_chat__username__get",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Username"
+                        }
+                    },
+                    {
+                        "name": "top_k",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 3,
+                            "title": "Top K"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "summary": "Read Root",
+                "operationId": "read_root__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Body_voice_chat_api_voice_chat__post": {
+                "properties": {
+                    "file": {
+                        "type": "string",
+                        "format": "binary",
+                        "title": "File"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "file"
+                ],
+                "title": "Body_voice_chat_api_voice_chat__post"
+            },
+            "ChatRequest": {
+                "properties": {
+                    "prompt": {
+                        "type": "string",
+                        "title": "Prompt"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt"
+                ],
+                "title": "ChatRequest"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "LoginRequest": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "title": "Username"
+                    },
+                    "password": {
+                        "type": "string",
+                        "title": "Password"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "password"
+                ],
+                "title": "LoginRequest"
+            },
+            "PubMedRequest": {
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "title": "Query"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "query"
+                ],
+                "title": "PubMedRequest"
+            },
+            "UserProfile": {
+                "properties": {
+                    "gender": {
+                        "type": "string",
+                        "title": "Gender"
+                    },
+                    "age": {
+                        "type": "integer",
+                        "title": "Age"
+                    },
+                    "medical_history": {
+                        "type": "string",
+                        "title": "Medical History"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "gender",
+                    "age",
+                    "medical_history"
+                ],
+                "title": "UserProfile"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "OAuth2PasswordBearer": {
+                "type": "oauth2",
+                "flows": {
+                    "password": {
+                        "scopes": {},
+                        "tokenUrl": "token"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "User Management",
+            "description": "APIs for user authentication and profile management."
+        },
+        {
+            "name": "Health AI",
+            "description": "APIs for AI-based health consultation and chat."
+        },
+        {
+            "name": "External Data",
+            "description": "APIs for querying external medical databases like PubMed."
+        }
+    ]
+}
