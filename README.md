@@ -38,7 +38,7 @@ The LLM Health Assistant provides general information only and does not constitu
 
 ---
 
-## [Introduction](#introduction)
+## Introduction
  The LLM Health Assistant is a health consultation platform based on a **large language model (LLM)**, leveraging **generative AI** and **retrieval-augmented generation (RAG)** technologies to provide users with personalized and intelligent health Q&A services. The system integrates multiple functional modules, including **text interaction**, **voice interaction**, **PubMed paper retrieval**, **user information management**, and **conversation storage**.
 
 [Back to Table of Contents](#table-of-contents)
