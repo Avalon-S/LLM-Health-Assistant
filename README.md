@@ -156,6 +156,7 @@ SECRET_KEY=your_secret_key
 ZHIPU_API_KEY=your_glm_api_key
 PINECONE_API_KEY=your_pinecone_key
 ```
+For Pinepone configuration, set `index name=healthassistant`, set region as `us-east-1`.
 
 - Install Dependencies
 ```sh
@@ -200,6 +201,7 @@ SECRET_KEY=your_secret_key
 ZHIPU_API_KEY=your_glm_api_key
 PINECONE_API_KEY=your_pinecone_key
 ```
+For Pinepone configuration, set `index name=healthassistant`, set region as `us-east-1`.
 
 - Build the image (without using cache), it takes about 10-20 minutes, depending on your internet speed.
 ```bash
