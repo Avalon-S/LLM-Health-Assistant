@@ -237,7 +237,12 @@ docker-compose down
 ---
 
 ## Reflection and Future Enhancements 
-to be coninued...
+
+At the beginning, the initial plan was to [locally deploy LLaMA 3.2 1B and 3B](https://github.com/Avalon-S/LLaMA-Factory-SDE). However, during later development, there were numerous dependency conflicts, and the models performed extremely poorly in multi-turn conversations, with severe hallucinations. Moreover, locally deploying an LLM would result in an excessively large Docker image, making deployment time-consuming. Therefore, we switched to using GLM-4-Plus, which delivers performance comparable to GPT-4o, and the results have been satisfactory.
+
+It should be noted that the strategy for deciding whether to call specific APIs to enhance the prompt in this project follows an **expert system** approach. Specifically, if certain keywords are detected, such as *my age* or *paper*, the system will automatically call the Pinecone or PubMed API, respectively, for retrieval. This is a simple, fast, and effective strategy. LangChain was not used because experiments showed that the task was not complex (no deep reasoning required), and using an agent to determine which API to call took significantly longer than letting the LLM respond directly. Additionally, there was no difference in answer quality—GLM-4-Plus was already powerful enough.
+
+Overall, despite the tight timeline, I am fairly satisfied with the implementation of this project.
 
 [Back to Table of Contents](#table-of-contents)
 
