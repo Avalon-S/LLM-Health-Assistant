@@ -104,18 +104,18 @@
         let mediaRecorder;
         let audioChunks = [];
 
-        // 监听页面加载，恢复聊天记录
+        // Monitor page loading and restore chat history
         document.addEventListener("DOMContentLoaded", () => {
             const token = localStorage.getItem("token");
             if (!token) {
                 alert("You are not logged in. Redirecting to login page.");
                 window.location.href = "index.html";
             }
-            loadvoiceChatHistory(); // 加载聊天记录
+            loadvoiceChatHistory();
         });
 
 
-        // 加载聊天记录
+        
         function loadvoiceChatHistory() {
             const chatBox = document.getElementById("chat-box");
             const voicechatHistory = JSON.parse(localStorage.getItem("voiceChatHistory")) || [];
@@ -130,14 +130,13 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // 存储聊天记录
+        
         function saveMessage(role, text) {
             let voicechatHistory = JSON.parse(localStorage.getItem("voiceChatHistory")) || [];
             voicechatHistory.push({ role, text });
             localStorage.setItem("voiceChatHistory", JSON.stringify(voicechatHistory));
         }
 
-        // 录音功能
         async function toggleRecording() {
             const button = document.getElementById("record-button");
             if (!isRecording) {
@@ -156,7 +155,6 @@
             }
         }
 
-        // 发送音频
         async function sendAudio() {
             if (audioChunks.length === 0) {
                 alert("No audio recorded!");
@@ -207,7 +205,7 @@
             }
         }
 
-        // 添加聊天消息到界面
+        // Add chat messages to the interface
         function addMessage(content, role) {
             const chatBox = document.getElementById("chat-box");
             const messageDiv = document.createElement("div");

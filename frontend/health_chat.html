@@ -117,7 +117,7 @@
                 return;
             }
 
-            // 加载本地缓存的聊天记录
+            // Load the chat history from the local cache
             loadChatHistory();
         });
 
@@ -139,7 +139,7 @@
             let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
             chatHistory.push({ role, text });
 
-            // console.log("Saving message:", { role, text });  // 调试信息
+            // console.log("Saving message:", { role, text });
 
             localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
         }

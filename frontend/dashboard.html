@@ -19,7 +19,7 @@
 
     <script>
         function goToProfile() {
-            window.location.href = "profile.html";  // 跳转到问卷页面
+            window.location.href = "profile.html";
         }
 
         function healthChat() {
@@ -38,11 +38,11 @@
             window.location.href = "index.html";
         }
 
-        // 加载用户信息并验证 JWT
+        // Load user information and verify JWT
         document.addEventListener("DOMContentLoaded", async () => {
             const token = localStorage.getItem("token");
             if (!token) {
-                window.location.href = "index.html"; // 未登录则跳转回登录页
+                window.location.href = "index.html"; // Redirect to login page.
                 return;
             }
 
@@ -52,7 +52,7 @@
                 });
 
                 if (!response.ok) {
-                    // JWT 无效或过期，重定向回登录页面
+                    // JWT is invalid or expired, redirect back to the login page.
                     localStorage.removeItem("token");
                     window.location.href = "index.html";
                 } else {
