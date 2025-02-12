@@ -178,7 +178,7 @@ Input `http://localhost:8000/` in your browser to access the LLM Health Assistan
 python Cli_DB_Manager.py
 ```
 <div align="center">
-  <img src="docs/images/code_running.jpg" alt="code_running" style="width:80%;"/>
+  <img src="docs/images/code_running.jpg" alt="code_running" style="width:100%;"/>
   <p><em>Code Running</em></p>
 </div>
 
@@ -215,7 +215,7 @@ docker-compose down
 ```
 
 <div align="center">
-  <img src="docs/images/image_running.jpg" alt="image_running" style="width:80%;"/>
+  <img src="docs/images/image_running.jpg" alt="image_running" style="width:100%;"/>
   <p><em>Image Running</em></p>
 </div>
 
@@ -226,22 +226,22 @@ docker-compose down
 ## Project Display
 
 <div align="center">
-  <img src="docs/images/login.jpg" alt="login" style="width:80%;"/>
+  <img src="docs/images/login.jpg" alt="login" style="width:100%;"/>
   <p><em>Login Page</em></p>
 </div>
 
 <div align="center">
-  <img src="docs/images/dashboard.jpg" alt="dashboard" style="width:80%;"/>
+  <img src="docs/images/dashboard.jpg" alt="dashboard" style="width:100%;"/>
   <p><em>Dashboard Page</em></p>
 </div>
 
 <div align="center">
-  <img src="docs/images/health_chat.jpg" alt="health_chat" style="width:80%;"/>
+  <img src="docs/images/health_chat.jpg" alt="health_chat" style="width:100%;"/>
   <p><em>Health Chat Page</em></p>
 </div>
 
 <div align="center">
-  <img src="docs/images/voice_chat.jpg" alt="voice_chat" style="width:80%;"/>
+  <img src="docs/images/voice_chat.jpg" alt="voice_chat" style="width:100%;"/>
   <p><em>Voice Chat Page</em></p>
 </div>
 
