@@ -143,7 +143,7 @@ The system follows a **4-Layer Architecture** (not include presentation layer) t
 
 ## Usage
 
-- During development, `torch 2.6+cu124` was used for acceleration, but CUDA is not mandatory. Since the CPU computation speed is within an acceptable range, the Docker image is built with the CPU version of Torch for convenience. If you wish to use GPU acceleration within the image, please install the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
+- During development, `torch 2.6+cu124` was used for acceleration, but CUDA is not mandatory. Since the CPU computation speed is within an acceptable range, the Docker image is built with the CPU version of Torch for convenience. If you wish to use GPU acceleration within the image, please install the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html). `Dockerfile` and `docker-compose.yml` need to be reconfigured.
 
 - For user data management, this project also includes a database management system that allows querying and removing accounts from the two databases.
 
