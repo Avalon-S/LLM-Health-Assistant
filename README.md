@@ -113,13 +113,13 @@ The system follows a **4-Layer Architecture** (not include presentation layer) t
 - **Memory**: 32 GB
 
 2. **Software**
-| Tool | Purpose ||
-|-------------|------------------|
-| Anaconda | Development environment management ||
-| VS Code | Code development ||
-| JupyterLab | Early-stage experiment exploration ||
-| Edge Browser | Frontend interface testing ||
-| Postman | API testing ||
+| Tool        | Purpose                             |
+|------------|-------------------------------------|
+| Anaconda   | Development environment management |
+| VS Code    | Code development                   |
+| JupyterLab | Early-stage experiment exploration |
+| Edge Browser | Frontend interface testing       |
+| Postman    | API testing                        |
 
 [Back to Table of Contents](#table-of-contents)
 
