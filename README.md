@@ -131,6 +131,12 @@ The system follows a **4-Layer Architecture** (not include presentation layer) t
 | Edge Browser | Frontend interface testing       |
 | Postman    | API testing                        |
 
+3. **External API Key Sources**
+
+- [GLM-4-Plus](https://bigmodel.cn/dev/api/normal-model/glm-4)
+- [GLM-4-Voice](https://bigmodel.cn/dev/api/rtav/GLM-4-Voice)
+- [Pinecone](https://docs.pinecone.io/guides/get-started/quickstart)
+
 [Back to Table of Contents](#table-of-contents)
 
 ---
