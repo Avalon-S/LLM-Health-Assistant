@@ -5,9 +5,18 @@
   <img src="docs/images/logo.png" alt="logo" style="width:35%;"/>
   <p><em>Logo</em></p>
 </div>
+
 <div align="center">
-  <a href="docs/LLM Health Assistant Project Report.pdf"><strong>A Brief Report</strong></a><br>
-  <em><br></em>
+    <table>
+        <tr>
+            <td align="center">
+                <a href="docs/LLM Health Assistant Project Report.pdf"><strong>A Brief Report</strong></a><br>
+            </td>
+            <td align="center">
+                <a href="https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Avalon-S/LLM-Health-Assistant/main/docs/openapi.json"><strong>API Document</strong></a><br>
+            </td>
+        </tr>
+    </table>
 </div>
 
 ---
