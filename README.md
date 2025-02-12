@@ -113,6 +113,7 @@ The system follows a **4-Layer Architecture** (not include presentation layer) t
 - **Memory**: 32 GB
 
 2. **Software**
+
 | Tool        | Purpose                             |
 |------------|-------------------------------------|
 | Anaconda   | Development environment management |
