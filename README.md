@@ -9,15 +9,11 @@
   <a href="docs/LLM Health Assistant Project Report.pdf"><strong>A Brief Report</strong></a><br>
   <em><br></em>
 </div>
-<div align="center">
-  <a href="https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Avalon-S/LLM-Health-Assistant/main/docs/openapi.json"><strong>API Document</strong></a><br>
-  <em><br></em>
-</div>
 
 ---
 
 ## Disclaimer
-The LLM Health Assistant provides general information only and does not constitute medical advice. It does not establish a doctor-patient relationship. Always consult a qualified healthcare professional for medical concerns. We are not responsible for any decisions made based on the platform’s information.
+The Health Consultation Assistant provides general information only and does not constitute medical advice. It does not establish a doctor-patient relationship. Always consult a qualified healthcare professional for medical concerns. We are not responsible for any decisions made based on the platform’s information.
 
 ---
 
@@ -117,29 +113,19 @@ The system follows a **4-Layer Architecture** (not include presentation layer) t
 - **Memory**: 32 GB
 
 2. **Software**
-| Tool         | Purpose                  |
-|-------------|-------------------------|
-| Anaconda   | Development environment management |
-| VS Code    | Code development         |
-| JupyterLab | Early-stage experiment exploration |
-| Edge Browser | Frontend interface testing |
-| Postman    | API testing              |
-
-3. ** External API Key Sources**
-- [GLM-4-Plus](https://bigmodel.cn/dev/api/normal-model/glm-4)
-- [GLM-4-Voice](https://bigmodel.cn/dev/api/rtav/GLM-4-Voice)
-- [Pinecone](https://docs.pinecone.io/guides/get-started/quickstart)
+| Tool | Purpose ||
+|-------------|------------------|
+| Anaconda | Development environment management ||
+| VS Code | Code development ||
+| JupyterLab | Early-stage experiment exploration ||
+| Edge Browser | Frontend interface testing ||
+| Postman | API testing ||
 
 [Back to Table of Contents](#table-of-contents)
 
 ---
 
 ## Usage
-
-- During development, torch 2.6+cu124 was used for acceleration, but CUDA is not mandatory. Since the CPU computation speed is within an acceptable range, the Docker image is built with the CPU version of torch for convenience. If you wish to use GPU acceleration within the image, please install the [NVIDIA Container Toolkit](https://docs.nvidia.com/ai-enterprise/deployment/vmware/latest/docker.html) yourself.
-
-- For user data management, this project also includes a database management system `Cli_DB_Manager.py`  that allows querying and removing accounts from the two databases.
-
 1. **Running Code**
 
 ```bash
@@ -178,13 +164,13 @@ Input `http://localhost:8000/` in your browser to access the LLM Health Assistan
 python Cli_DB_Manager.py
 ```
 <div align="center">
-  <img src="docs/images/code_running.jpg" alt="code_running" style="width:100%;"/>
+  <img src="docs/images/code_running.jpg" alt="code_running" style="width:80%;"/>
   <p><em>Code Running</em></p>
 </div>
 
 2. **Build & Run the Docker Image**
 
-Before doing this, make sure the Docker CLI is enabled. It is recommended to install [Docker Desktop]().
+Before doing this, make sure the Docker CLI is enabled. It is recommended to install Docker Desktop.
 
 ```bash
 git clone https://github.com/Avalon-S/LLM-Health-Assistant
@@ -206,7 +192,7 @@ docker-compose build --no-cache
 
 - Start the container (run in the background)
 ```bash
-docker-compose up -d
+docker-compose build --no-cache
 ```
 
 - Stop all containers started by `docker-compose` up
@@ -215,7 +201,7 @@ docker-compose down
 ```
 
 <div align="center">
-  <img src="docs/images/image_running.jpg" alt="image_running" style="width:100%;"/>
+  <img src="docs/images/image_running.jpg" alt="image_running" style="width:80%;"/>
   <p><em>Image Running</em></p>
 </div>
 
@@ -226,22 +212,22 @@ docker-compose down
 ## Project Display
 
 <div align="center">
-  <img src="docs/images/login.jpg" alt="login" style="width:100%;"/>
+  <img src="docs/images/login.jpg" alt="login" style="width:80%;"/>
   <p><em>Login Page</em></p>
 </div>
 
 <div align="center">
-  <img src="docs/images/dashboard.jpg" alt="dashboard" style="width:100%;"/>
+  <img src="docs/images/dashboard.jpg" alt="dashboard" style="width:80%;"/>
   <p><em>Dashboard Page</em></p>
 </div>
 
 <div align="center">
-  <img src="docs/images/health_chat.jpg" alt="health_chat" style="width:100%;"/>
+  <img src="docs/images/health_chat.jpg" alt="health_chat" style="width:80%;"/>
   <p><em>Health Chat Page</em></p>
 </div>
 
 <div align="center">
-  <img src="docs/images/voice_chat.jpg" alt="voice_chat" style="width:100%;"/>
+  <img src="docs/images/voice_chat.jpg" alt="voice_chat" style="width:80%;"/>
   <p><em>Voice Chat Page</em></p>
 </div>
 
@@ -250,12 +236,7 @@ docker-compose down
 ---
 
 ## Reflection and Future Enhancements 
-
-At the beginning, the initial plan was to [locally deploy LLaMA 3.2 1B and 3B](https://github.com/Avalon-S/LLaMA-Factory-SDE). However, during later development, there were numerous dependency conflicts, and the models performed extremely poorly in multi-turn dialogues, with severe hallucinations. Moreover, locally deploying an LLM would result in an excessively large Docker image, making deployment time-consuming. Therefore, we switched to using GLM-4-Plus, which delivers performance comparable to GPT-4o, and the results have been satisfactory.
-
-It should be noted that the strategy for deciding whether to call specific APIs to enhance the prompt in this project follows an **expert system** approach. Specifically, if certain keywords are detected, such as *my age* or *paper*, the system will automatically call the Pinecone or PubMed API, respectively, for retrieval. This is a simple, fast, and effective strategy. LangChain was not used because experiments showed that the task was not complex (no deep reasoning required), and using an agent to determine which API to call took significantly longer than letting the LLM respond directly. Additionally, there was no difference in answer quality—GLM-4-Plus was already powerful enough.
-
-Overall, despite the tight timeline, I am fairly satisfied with the implementation of this project.
+to be coninued...
 
 [Back to Table of Contents](#table-of-contents)
 
