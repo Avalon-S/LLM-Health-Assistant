@@ -19,17 +19,17 @@ The Health Consultation Assistant provides general information only and does not
 
 ## Table of Contents
 
-1. [📖 Introduction](#📖-introduction)
-2. [🏗️ Service Architecture](#🏗️-service-architecture)
-3. [🛠️ Technology Stack & Development Tools](#🛠️-technology-stack-&-development-tools)
-4. [🚀 Usage](#🚀usage)
-5. [🎥 Project Display](#🎥project-display)
-6. [🔍 Reflection & Future Enhancements ](#🔍reflection-&-future-enhancements )
-7. [📜 License](#📜license)
+1. 📖[Introduction](#introduction)
+2. 🏗️[Service Architecture](#service-architecture)
+3. 🛠️[Technology Stack & Development Tools](#technology-stack-&-development-tools)
+4. 🚀[Usage](#usage)
+5. 🎥[Project Display](#project-display)
+6. 🔍[Reflection & Future Enhancements ](#reflection-&-future-enhancements )
+7. 📜[License](#license)
 
 ---
 
-## 📖 Introduction
+[📖 Introduction](#introduction)
  The LLM Health Assistant is a health consultation platform based on a **large language model (LLM)**, leveraging **generative AI** and **retrieval-augmented generation (RAG)** technologies to
  provide users with personalized and intelligent health Q&A services. The system integrates
  multiple functional modules, including **text interaction**, **voice interaction**, **PubMed paper re
@@ -39,7 +39,7 @@ trieval**, **user information management**, and **conversation storage**.
 
 ---
 
-## 🏗️ Service Architecture
+## Service Architecture
 The system follows a **4-Layer Architecture** (not include presentation layer) to ensure efficiency, scalability, and security:
 
 1. Presentation Layer
@@ -91,7 +91,7 @@ The system follows a **4-Layer Architecture** (not include presentation layer) t
 
 ---
 
-## 🛠️ Technology Stack & Development Tools
+## Technology Stack & Development Tools
 ### Backend
 - **FastAPI** (Lightweight web framework supporting high concurrency)
 - **SQLite** (Lightweight database for user data storage)
@@ -115,7 +115,7 @@ to be coninued...
 
 ---
 
-## 🚀 Usage
+## Usage
 1. **Running Code**
 
 ```bash
@@ -199,7 +199,7 @@ docker-compose down
 
 ---
 
-## 🎥 Project Display
+## Project Display
 
 <div align="center">
   <img src="docs/images/login.jpg" alt="login" style="width:80%;"/>
@@ -225,14 +225,14 @@ docker-compose down
 
 ---
 
-## 🔍 Reflection & Future Enhancements 
+## Reflection & Future Enhancements 
 to be coninued...
 
 [Back to Table of Contents](#table-of-contents)
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
 
