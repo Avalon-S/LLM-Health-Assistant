@@ -136,7 +136,7 @@ The system follows a **4-Layer Architecture** (not include presentation layer) t
 
 ## Usage
 
-- During development, Torch 2.6+cu124 was used for acceleration, but CUDA is not mandatory. Since the CPU computation speed is within an acceptable range, the Docker image is built with the CPU version of Torch for convenience. If you wish to use GPU acceleration within the image, please install the [NVIDIA Container Toolkit](https://docs.nvidia.com/ai-enterprise/deployment/vmware/latest/docker.html) yourself.
+- During development, torch 2.6+cu124 was used for acceleration, but CUDA is not mandatory. Since the CPU computation speed is within an acceptable range, the Docker image is built with the CPU version of torch for convenience. If you wish to use GPU acceleration within the image, please install the [NVIDIA Container Toolkit](https://docs.nvidia.com/ai-enterprise/deployment/vmware/latest/docker.html) yourself.
 
 - For user data management, this project also includes a database management system `Cli_DB_Manager.py`  that allows querying and removing accounts from the two databases.
 
