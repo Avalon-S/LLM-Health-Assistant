@@ -103,17 +103,50 @@
         let isRecording = false;
         let mediaRecorder;
         let audioChunks = [];
-    
-        
+
+        // 监听页面加载，恢复聊天记录
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("You are not logged in. Redirecting to login page.");
+                window.location.href = "index.html";
+            }
+            loadvoiceChatHistory(); // 加载聊天记录
+        });
+
+
+        // 加载聊天记录
+        function loadvoiceChatHistory() {
+            const chatBox = document.getElementById("chat-box");
+            const voicechatHistory = JSON.parse(localStorage.getItem("voiceChatHistory")) || [];
+
+            voicechatHistory.forEach(msg => {
+                const messageDiv = document.createElement("div");
+                messageDiv.className = `message ${msg.role}`;
+                messageDiv.textContent = msg.text;
+                chatBox.appendChild(messageDiv);
+            });
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // 存储聊天记录
+        function saveMessage(role, text) {
+            let voicechatHistory = JSON.parse(localStorage.getItem("voiceChatHistory")) || [];
+            voicechatHistory.push({ role, text });
+            localStorage.setItem("voiceChatHistory", JSON.stringify(voicechatHistory));
+        }
+
+        // 录音功能
         async function toggleRecording() {
             const button = document.getElementById("record-button");
             if (!isRecording) {
                 button.textContent = "Stop Recording";
                 isRecording = true;
-    
+
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
-    
+
                 mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
                 mediaRecorder.start();
             } else {
@@ -122,20 +155,21 @@
                 mediaRecorder.stop();
             }
         }
-    
-        
+
+        // 发送音频
         async function sendAudio() {
             if (audioChunks.length === 0) {
                 alert("No audio recorded!");
                 return;
             }
-    
+
             const blob = new Blob(audioChunks, { type: "audio/wav" });
             const formData = new FormData();
             formData.append("file", blob);
-    
+
             addMessage("Sending audio...", "user");
-    
+            saveMessage("user", "Sending audio...");
+
             try {
                 const token = localStorage.getItem("token");
                 const response = await fetch("/api/voice_chat", {
@@ -145,14 +179,15 @@
                     },
                     body: formData,
                 });
-    
+
                 if (response.ok) {
                     const result = await response.json();
                     const textResponse = result.response || "No response received.";
                     const audioBase64 = result.audio;
-    
+
                     addMessage(textResponse, "assistant");
-    
+                    saveMessage("assistant", textResponse);
+
                     if (audioBase64) {
                         const audioBlob = await fetch(`data:audio/wav;base64,${audioBase64}`).then(res => res.blob());
                         const audioURL = URL.createObjectURL(audioBlob);
@@ -162,15 +197,17 @@
                 } else {
                     const errorData = await response.json();
                     addMessage(`Error: ${errorData.detail}`, "assistant");
+                    saveMessage("assistant", `Error: ${errorData.detail}`);
                 }
             } catch (error) {
                 addMessage(`Error: ${error.message}`, "assistant");
+                saveMessage("assistant", `Error: ${error.message}`);
             } finally {
                 audioChunks = [];
             }
         }
-    
-        
+
+        // 添加聊天消息到界面
         function addMessage(content, role) {
             const chatBox = document.getElementById("chat-box");
             const messageDiv = document.createElement("div");
@@ -179,15 +216,6 @@
             chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-
-        
-        document.addEventListener("DOMContentLoaded", () => {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                alert("You are not logged in. Redirecting to login page.");
-                window.location.href = "index.html";
-            }
-        });
     </script>
 </body>
 </html>

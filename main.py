@@ -14,13 +14,14 @@ from pinecone import Pinecone
 from sentence_transformers import SentenceTransformer
 import os
 from dotenv import load_dotenv
-from voice_chat import router as voice_chat_router
-from health_chat import router as health_chat_router
-from query_pubmed import router as query_pubmed_router
+from backend.health_chat import router as health_chat_router
+from backend.query_pubmed import router as query_pubmed_router
+from backend.voice_chat import router as voice_chat_router
 
-load_dotenv()
 
-# ======== SQLite Configuration ========
+load_dotenv() 
+
+# ======== SQLite Settings ========
 DATABASE_URL = "sqlite:///./users.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine)
@@ -37,13 +38,13 @@ class User(Base):
 
 Base.metadata.create_all(bind=engine)
 
-# ======== Password Hashing ========
+# ======== Password encryption settings ========
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # ======== JWT Configuration ========
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1  # Expiration time
+ACCESS_TOKEN_EXPIRE_MINUTES = 1 # Expiration time (x min)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -81,19 +82,19 @@ pinecone_index = pc.Index(INDEX_NAME)
 # ======== FastAPI Application ========
 app = FastAPI()
 
-# Mount static file directory
+# Mount the static file directory
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
-# Add CORS Middleware
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins, restrict in production
+    allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Use APIRouter to integrate sub-applications
+# Integrate sub-applications using APIRouter
 router = APIRouter()
 router.include_router(health_chat_router)
 router.include_router(query_pubmed_router)
@@ -101,7 +102,7 @@ router.include_router(voice_chat_router)
 
 app.include_router(router)
 
-# ======== Pydantic Data Models ========
+# ======== Pydantic Data Model========
 class RegisterRequest(BaseModel):
     username: str
     password: str
@@ -115,7 +116,7 @@ class UserProfile(BaseModel):
     age: int
     medical_history: str
 
-# ======== Dependency: Get Database Session ========
+# ======== Dependency: Get a database session ========
 def get_db():
     db = SessionLocal()
     try:
@@ -123,7 +124,7 @@ def get_db():
     finally:
         db.close()
 
-# ======== Register (Auto Login) ========
+# ======== Register (auto login) ========
 @app.post("/api/authenticate")
 def authenticate(user: LoginRequest, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.username == user.username).first()
@@ -140,13 +141,14 @@ def authenticate(user: LoginRequest, db: Session = Depends(get_db)):
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
-# Verify user access to Dashboard
+# Authenticating user access to the Dashboard
 @app.get("/api/verify")
 def verify_dashboard(token: str = Depends(oauth2_scheme)):
     username = verify_token(token)
     return {"username": username}
 
-# ======== Get User Information ========
+
+# ======== Get user information ========
 @app.get("/api/user/{username}")
 def get_user(username: str, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     current_user = verify_token(token)
@@ -157,13 +159,14 @@ def get_user(username: str, db: Session = Depends(get_db), token: str = Depends(
         raise HTTPException(status_code=404, detail="User not found")
     return {"username": user.username, "gender": user.gender, "age": user.age, "medical_history": user.medical_history}
 
-# ======== Update User Information (Overwrite Storage) ========
+# ======== Update user information (overwrite storage) ========
 @app.put("/api/user/{username}")
 def update_user(username: str, profile: UserProfile, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     current_user = verify_token(token)
     if current_user != username:
         raise HTTPException(status_code=403, detail="Access denied.")
 
+    # Updating SQLite Data
     user = db.query(User).filter(User.username == username).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -173,11 +176,13 @@ def update_user(username: str, profile: UserProfile, db: Session = Depends(get_d
     user.medical_history = profile.medical_history
     db.commit()
 
+    # Delete Profile data (keep other data)
     try:
-        pinecone_index.delete(ids=[f"profile-{username}"], namespace=username)
+        pinecone_index.delete(ids=[f"profile-{username}"], namespace=username)  # 只删除用户的 Profile 数据
     except Exception as e:
         print(f"Error deleting profile from Pinecone for user {username}: {e}")
 
+    # Upload new Profile data to Pinecone
     try:
         prompt = f"My gender is {user.gender}, my age is {user.age}, and I have a medical history of {user.medical_history}."
         vector = embedding_model.encode([prompt])[0].tolist()
@@ -186,6 +191,7 @@ def update_user(username: str, profile: UserProfile, db: Session = Depends(get_d
         print(f"Error uploading profile to Pinecone for user {username}: {e}")
 
     return {"message": "Profile updated successfully"}
+
 
 # ======== Processing chat history ========
 @app.post("/api/chat")

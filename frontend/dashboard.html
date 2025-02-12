@@ -19,7 +19,7 @@
 
     <script>
         function goToProfile() {
-            window.location.href = "profile.html";
+            window.location.href = "profile.html";  // 跳转到问卷页面
         }
 
         function healthChat() {
@@ -32,6 +32,9 @@
 
         function logout() {
             localStorage.removeItem("token");
+            localStorage.removeItem("username");
+            localStorage.removeItem("chatHistory");
+            localStorage.removeItem("voiceChatHistory");
             window.location.href = "index.html";
         }
 
@@ -39,7 +42,7 @@
         document.addEventListener("DOMContentLoaded", async () => {
             const token = localStorage.getItem("token");
             if (!token) {
-                window.location.href = "index.html";
+                window.location.href = "index.html"; // 未登录则跳转回登录页
                 return;
             }
 
@@ -49,7 +52,7 @@
                 });
 
                 if (!response.ok) {
-                
+                    // JWT 无效或过期，重定向回登录页面
                     localStorage.removeItem("token");
                     window.location.href = "index.html";
                 } else {

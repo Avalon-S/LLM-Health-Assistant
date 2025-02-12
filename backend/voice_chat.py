@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv() 
 
-router = APIRouter(prefix="/api/voice_chat", tags=["Voice Chat"])  # Use prefix and tags
+router = APIRouter(prefix="/api/voice_chat", tags=["Voice Chat"])  # Using prefix and tags
 
 API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 VOICE_API_KEY = os.getenv("ZHIPU_API_KEY")
@@ -23,7 +23,7 @@ def encode_audio_to_base64(audio_file_path):
 @router.post("/")
 async def voice_chat(file: UploadFile = File(...)):
     """
-    Receive user audio file, call the large model API, and return text and audio responses.
+    Receive user audio files, call the large model interface, and return text and audio responses
     """
     audio_path = f"temp_{file.filename}"
     try:

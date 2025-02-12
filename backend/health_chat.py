@@ -10,8 +10,10 @@ from pinecone import Pinecone
 import os
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv() 
 
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 
 # Initialize APIRouter
@@ -20,6 +22,8 @@ router = APIRouter(prefix="/api/health_chat", tags=["Health Chat"])
 # ====== Zhipu API Configuration ======
 ZHIPU_API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 ZHIPU_API_KEY = os.getenv("ZHIPU_API_KEY")
+print("ZHIPU_API_KEY")
+print(ZHIPU_API_KEY)
 
 # ====== Pinecone Configuration ======
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
@@ -37,10 +41,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-# Verify JWT
+# Verifying the JWT
 def verify_token(token: str):
     """
-    Verify JWT and extract username
+    Verify the JWT and extract the username
     """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -51,7 +55,7 @@ def verify_token(token: str):
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
-# Keyword Matching Rules
+# Keywords Matching LibraryLibrary
 PINECONE_KEYWORDS = [
     "my personal info", "personal history", "previous conversation", "past chat", "my data",
     "my name", "my age", "my profile", "my records", "my history"
@@ -67,19 +71,19 @@ class ChatRequest(BaseModel):
 
 def should_query_pinecone(user_input: str) -> bool:
     """
-    Return True if the user's query contains Pinecone-related keywords
+    Returns True if the user's question contains Pinecone related keywords
     """
     return any(keyword in user_input.lower() for keyword in PINECONE_KEYWORDS)
 
 def should_query_pubmed(user_input: str) -> bool:
     """
-    Return True if the user's query contains PubMed-related keywords
+    Returns True if the user's question contains PubMed-related keywords
     """
     return any(keyword in user_input.lower() for keyword in PUBMED_KEYWORDS)
 
 def query_pinecone(user_query: str, username: str, top_k: int = 3):
     """
-    Query Pinecone for historical chat records
+    Query Pinecone to get historical chat records
     """
     try:
         query_vector = embedding_model.encode([user_query])[0].tolist()
@@ -91,7 +95,7 @@ def query_pinecone(user_query: str, username: str, top_k: int = 3):
 
 def query_pubmed(user_query: str):
     """
-    Query PubMed literature through `query_pubmed.py`
+    Query PubMed articles with `query_pubmed.py`
     """
     try:
         response = requests.post(PUBMED_API_URL, json={"query": user_query})
@@ -111,7 +115,6 @@ def store_chat_in_pinecone(username: str, user_input: str, model_response: str):
     Store user chat history in Pinecone
     """
     try:
-        # Ensure Vector ID contains only ASCII characters
         sanitized_user_input = re.sub(r'[^\x00-\x7F]+', '', user_input)  # Remove non-ASCII characters
         user_vector_id = f"user-{username}-{sanitized_user_input[:10]}"
         model_vector_id = f"model-{username}-{sanitized_user_input[:10]}"
@@ -127,7 +130,7 @@ def store_chat_in_pinecone(username: str, user_input: str, model_response: str):
 @router.post("/")
 def chat_with_model(request: ChatRequest, token: str = Depends(oauth2_scheme)):
     """
-    Process user health consultation requests
+    Processing users' health consultation requests
     """
     username = verify_token(token)
     logging.info(f"Received request from {username}: prompt={request.prompt}")
@@ -135,19 +138,19 @@ def chat_with_model(request: ChatRequest, token: str = Depends(oauth2_scheme)):
     user_input = request.prompt
     retrieved_context = ""
 
-    # Query Pinecone for historical chat records
+    # Query Pinecone historical chat records
     if should_query_pinecone(user_input):
         chat_history = query_pinecone(user_input, username)
         if chat_history:
             retrieved_context += "### Previous Conversations:\n" + "\n".join(chat_history) + "\n"
 
-    # Query PubMed for related research
+    # Search PubMed for related studies
     if should_query_pubmed(user_input):
         pubmed_results = query_pubmed(user_input)
         if pubmed_results:
             retrieved_context += "### Relevant Research from PubMed:\n" + "\n".join(pubmed_results) + "\n"
 
-    # Construct final prompt
+    # Build the final prompt
     final_prompt = f"""
     You are an AI health assistant. Answer the user's question concisely and accurately.
 
@@ -157,6 +160,8 @@ def chat_with_model(request: ChatRequest, token: str = Depends(oauth2_scheme)):
 
     Provide a well-structured, professional response with a disclaimer that you are not a substitute for professional medical advice.
     """
+    # print("Final prompt")
+    # print(final_prompt)
 
     headers = {
         "Content-Type": "application/json",

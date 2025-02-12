@@ -15,7 +15,7 @@
             align-items: center;
             height: 100vh;
             color: #333;
-            overflow: hidden; 
+            overflow: hidden; /* 防止动画超出视口 */
         }
 
         canvas {
@@ -24,7 +24,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; 
+            z-index: -1; /* 确保 canvas 在背景层 */
         }
 
         .login-container {
@@ -121,7 +121,7 @@
         const canvas = document.getElementById("background");
         const ctx = canvas.getContext("2d");
 
-        
+        // 设置画布大小
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -129,7 +129,7 @@
         window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
 
-        
+        // 动态线条动画
         const lines = [];
         for (let i = 0; i < 100; i++) {
             lines.push({
@@ -156,7 +156,7 @@
                 line.x += line.dx;
                 line.y += line.dy;
 
-                
+                // 反弹效果
                 if (line.x < 0 || line.x > canvas.width) line.dx *= -1;
                 if (line.y < 0 || line.y > canvas.height) line.dy *= -1;
             });

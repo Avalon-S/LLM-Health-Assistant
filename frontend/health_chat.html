@@ -116,7 +116,33 @@
                 window.location.href = "index.html";
                 return;
             }
+
+            // 加载本地缓存的聊天记录
+            loadChatHistory();
         });
+
+        function loadChatHistory() {
+            const messagesDiv = document.getElementById("messages");
+            const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+            chatHistory.forEach(msg => {
+                const messageDiv = document.createElement("div");
+                messageDiv.className = `message ${msg.role}`;
+                messageDiv.textContent = msg.text;
+                messagesDiv.appendChild(messageDiv);
+            });
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function saveMessage(role, text) {
+            let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+            chatHistory.push({ role, text });
+
+            // console.log("Saving message:", { role, text });  // 调试信息
+
+            localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+        }
 
         async function sendMessage() {
             const input = document.getElementById("user-input");
@@ -130,6 +156,7 @@
             userMessageDiv.className = "message user";
             userMessageDiv.textContent = message;
             messagesDiv.appendChild(userMessageDiv);
+            saveMessage("user", message);
 
             input.value = "";
 
@@ -149,6 +176,7 @@
                 assistantMessageDiv.className = "message assistant";
                 assistantMessageDiv.textContent = data.response || "Error in response";
                 messagesDiv.appendChild(assistantMessageDiv);
+                saveMessage("assistant", data.response || "Error in response");
 
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             } catch (error) {
