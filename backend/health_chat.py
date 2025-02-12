@@ -22,8 +22,6 @@ router = APIRouter(prefix="/api/health_chat", tags=["Health Chat"])
 # ====== Zhipu API Configuration ======
 ZHIPU_API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 ZHIPU_API_KEY = os.getenv("ZHIPU_API_KEY")
-print("ZHIPU_API_KEY")
-print(ZHIPU_API_KEY)
 
 # ====== Pinecone Configuration ======
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
