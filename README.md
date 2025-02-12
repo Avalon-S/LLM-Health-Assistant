@@ -22,7 +22,7 @@
 ---
 
 ## Disclaimer
-The Health Consultation Assistant provides general information only and does not constitute medical advice. It does not establish a doctor-patient relationship. Always consult a qualified healthcare professional for medical concerns. We are not responsible for any decisions made based on the platform’s information.
+The LLM Health Assistant provides general information only and does not constitute medical advice. It does not establish a doctor-patient relationship. Always consult a qualified healthcare professional for medical concerns. We are not responsible for any decisions made based on the platform’s information.
 
 ---
 
