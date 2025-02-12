@@ -215,7 +215,7 @@ def get_chat_history(username: str, top_k: int = 3, token: str = Depends(oauth2_
     chat_history = [r["metadata"]["text"] for r in results.get("matches", [])]
     return {"chat_history": chat_history if chat_history else ["No chat history found."]}
 
-# By default, it will jump to index.html
+# By default, it will direct to index.html
 @app.get("/")
 def read_root():
     return RedirectResponse(url="/static/index.html")
