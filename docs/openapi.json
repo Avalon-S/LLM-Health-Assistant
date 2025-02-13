@@ -366,7 +366,7 @@
             }
           }
         },
-        "description": "Allows a user to send a text message and receive a response from the LLM model."
+        "description": "Allows a user to send a text message and update the profile in Pinecone."
       }
     },
     "/api/chat/{username}": {
