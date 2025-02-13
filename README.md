@@ -33,7 +33,7 @@ The LLM Health Assistant provides general information only and does not constitu
 3. 🛠️[Technology Stack and Development Tools](#technology-stack-and-development-tools)
 4. 🚀[Usage](#usage)
 5. 🎥[Project Display](#project-display)
-6. 🔍[Reflection and Future Enhancements ](#reflection-and-future-enhancements )
+6. 🔍[Reflection ](#reflection)
 7. 📜[License](#license)
 
 ---
@@ -265,7 +265,7 @@ python Cli_DB_Manager.py
 
 ---
 
-## Reflection and Future Enhancements 
+## Reflection
 
 At the beginning, the initial plan was to [locally deploy LLaMA 3.2 1B and 3B](https://github.com/Avalon-S/LLaMA-Factory-SDE). However, during later development, there were numerous dependency conflicts, and the models performed extremely poorly in multi-turn dialogues with severe hallucinations. Moreover, locally deploying an LLM would result in an excessively large Docker image, making deployment time-consuming. Therefore, we switched to using GLM-4-Plus, which delivers performance comparable to GPT-4o, and the results have been satisfactory.
 
