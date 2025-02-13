@@ -223,6 +223,13 @@ docker-compose up -d
 docker-compose down
 ```
 
+- Enter the administrator system (keep the container is running)
+```bash
+docker ps # Get CONTAINER ID
+docker exec -it <CONTAINER ID> /bin/bash
+python Cli_DB_Manager.py
+```
+
 <div align="center">
   <img src="docs/images/image_running.jpg" alt="image_running" style="width:80%;"/>
   <p><em>Image Running</em></p>
