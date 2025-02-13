@@ -178,7 +178,7 @@ def update_user(username: str, profile: UserProfile, db: Session = Depends(get_d
 
     # Delete Profile data (keep other data)
     try:
-        pinecone_index.delete(ids=[f"profile-{username}"], namespace=username)  # 只删除用户的 Profile 数据
+        pinecone_index.delete(ids=[f"profile-{username}"], namespace=username)  # Delete only the user's Profile data
     except Exception as e:
         print(f"Error deleting profile from Pinecone for user {username}: {e}")
 
