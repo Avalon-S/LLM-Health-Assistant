@@ -53,10 +53,10 @@ def verify_token(token: str):
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
-# Keywords Matching LibraryLibrary
+# Keywords Matching Library (Expert System)
 PINECONE_KEYWORDS = [
     "my personal info", "personal history", "previous conversation", "past chat", "my data",
-    "my name", "my age", "my profile", "my records", "my history"
+     "my age", "my profile", "my records", "my history"
 ]
 PUBMED_KEYWORDS = [
     "paper", "study", "research", "pubmed", "clinical trial", "medical journal", "scientific article",
