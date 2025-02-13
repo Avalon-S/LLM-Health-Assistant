@@ -218,7 +218,7 @@ docker-compose build --no-cache
 docker-compose up -d
 ```
 
-- Stop all containers started by `docker-compose` up
+- Stop all containers started by `docker-compose down`.
 ```bash
 docker-compose down
 ```
