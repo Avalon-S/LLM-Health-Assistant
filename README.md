@@ -183,7 +183,7 @@ Input `http://localhost:8000/` in your browser to access the LLM Health Assistan
 
 - Enter the administrator system
 ```bash
-python Cli_DB_Manager.py
+python CLI_DB_Manager.py
 ```
 <div align="center">
   <img src="docs/images/code_running.jpg" alt="code_running" style="width:80%;"/>
@@ -227,7 +227,7 @@ docker-compose down
 ```bash
 docker ps # Get CONTAINER ID
 docker exec -it <CONTAINER ID> /bin/bash
-python Cli_DB_Manager.py
+python CLI_DB_Manager.py
 ```
 
 <div align="center">
