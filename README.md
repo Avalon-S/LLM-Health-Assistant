@@ -149,7 +149,10 @@ The system follows a **4-Layer Architecture** (not include presentation layer) t
 
 1. **Running Code**
 
+Using `conda` to manage environment.
 ```bash
+conda create -n sde python=3.9
+conda activate sde 
 git clone https://github.com/Avalon-S/LLM-Health-Assistant
 cd LLM-Health-Assistant
 ```
